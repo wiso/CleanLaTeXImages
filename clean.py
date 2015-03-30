@@ -21,6 +21,16 @@ def find_img_in_latex(latex_file):
             if m:
                 yield m.group(1)
 
+
+def ask(img):
+    while True:
+        ans = raw_input("remove %s ([y]/n)? " % img)
+        if ans in ('', 'y'):
+            return True
+        elif ans == 'n':
+            return False
+
+
 if __name__ == "__main__":
     import argparse
     parser = argparse.ArgumentParser()
@@ -40,9 +50,6 @@ if __name__ == "__main__":
     for img in find_files(args.img_folder):
         img_relpath = relpath(img, main_folder)
         if splitext(img_relpath)[0] not in all_used_img:
-            ans = None
-            while ans not in ('y', '', 'n'):
-                ans = raw_input("remove %s ([y]/n)? " % img)
-            if ans in ('', 'y'):
+            if ask(img):
                 remove(img)
                 print "removed %s" % img
