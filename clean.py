@@ -1,5 +1,4 @@
 import logging
-logging.basicConfig(level=logging.INFO)
 from os.path import join, relpath, dirname, splitext
 from os import remove
 
@@ -31,16 +30,18 @@ def ask(img):
             return False
 
 
-if __name__ == "__main__":
+def main():
     import argparse
-    parser = argparse.ArgumentParser()
-    parser.add_argument("latex_file", help="latex file to be scan")
+    logging.basicConfig(level=logging.INFO)
+    parser = argparse.ArgumentParser(
+        description="Remove unused images from a LaTeX project."
+    )
+    parser.add_argument("latex_file", help="latex file to be scanned")
     parser.add_argument("img_folder", help="folder with images")
 
     args = parser.parse_args()
 
     logging.info("finding all images in folder %s", args.img_folder)
-    img_filenames = find_files(args.img_folder)
     logging.info("parsing %s latex file", args.latex_file)
 
     all_used_img = set(find_img_in_latex(args.latex_file))
@@ -53,3 +54,7 @@ if __name__ == "__main__":
             if ask(img):
                 remove(img)
                 print("removed %s" % img)
+
+
+if __name__ == "__main__":
+    main()
