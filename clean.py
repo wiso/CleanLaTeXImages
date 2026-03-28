@@ -13,7 +13,7 @@ def find_files(folder):
 
 def find_img_in_latex(latex_file):
     import re
-    regex_string = "\\includegraphics(?:\[.*?\])?\{(.+?)\}"
+    regex_string = r"\\includegraphics(?:\[.*?\])?\{(.+?)\}"
     r = re.compile(regex_string)
     with open(latex_file) as f:
         it = r.finditer(f.read())
@@ -24,7 +24,7 @@ def find_img_in_latex(latex_file):
 
 def ask(img):
     while True:
-        ans = raw_input("remove %s ([y]/n)? " % img)
+        ans = input("remove %s ([y]/n)? " % img)
         if ans in ('', 'y'):
             return True
         elif ans == 'n':
@@ -46,10 +46,10 @@ if __name__ == "__main__":
     all_used_img = set(find_img_in_latex(args.latex_file))
     main_folder = dirname(args.latex_file)
 
-    print "all images in latex: ", len(all_used_img)
+    print("all images in latex: ", len(all_used_img))
     for img in find_files(args.img_folder):
         img_relpath = relpath(img, main_folder)
         if splitext(img_relpath)[0] not in all_used_img:
             if ask(img):
                 remove(img)
-                print "removed %s" % img
+                print("removed %s" % img)
